@@ -39,6 +39,15 @@ export type VerifyOtpResponse = {
     expiresAt: number;
 };
 
+export type SocialLoginRequest = {
+    provider: 'google' | 'facebook' | 'apple' | 'microsoft';
+    redirectTo: string;
+};
+
+export type SocialLoginResponse = {
+    url: string;
+};
+
 export type UserProfile = {
     id: string;
     email: string;
@@ -628,6 +637,19 @@ export type AuthPublicControllerVerifyOtpResponses = {
 };
 
 export type AuthPublicControllerVerifyOtpResponse = AuthPublicControllerVerifyOtpResponses[keyof AuthPublicControllerVerifyOtpResponses];
+
+export type AuthPublicControllerSocialLoginData = {
+    body: SocialLoginRequest;
+    path?: never;
+    query?: never;
+    url: '/public-auth/social-login';
+};
+
+export type AuthPublicControllerSocialLoginResponses = {
+    200: SocialLoginResponse;
+};
+
+export type AuthPublicControllerSocialLoginResponse = AuthPublicControllerSocialLoginResponses[keyof AuthPublicControllerSocialLoginResponses];
 
 export type AuthPrivateControllerGetProfileData = {
     body?: never;
