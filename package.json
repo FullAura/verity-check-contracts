@@ -1,6 +1,6 @@
 {
   "name": "@verity-check/contracts",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "description": "Shared API request/response types for the Verity Check platform",
   "license": "UNLICENSED",
   "private": true,
