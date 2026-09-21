@@ -573,6 +573,70 @@ export type SelectUserSettingsRequest = {
     [key: string]: unknown;
 };
 
+export type PhoneLookupRequest = {
+    /**
+     * Phone number in E.164
+     */
+    phone: string;
+};
+
+export type PhoneLookupResponse = {
+    /**
+     * Whether the number is a valid, dialable phone number.
+     */
+    valid: boolean;
+    /**
+     * Line type: MOBILE, FIXED_LINE, FIXED_LINE_OR_MOBILE, VOIP, etc. Null when undeterminable.
+     */
+    lineType: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Carrier name. Not derivable from libphonenumber-js — empty until a carrier data source is wired in.
+     */
+    carrier: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Geographic location (region/city). Not derivable from libphonenumber-js — empty until a geo data source is wired in.
+     */
+    location: string;
+    /**
+     * ISO 3166-1 alpha-2 country code.
+     */
+    country: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Country calling code (without +).
+     */
+    countryCallingCode: {
+        [key: string]: unknown;
+    } | null;
+    phone: {
+        [key: string]: unknown;
+    } | null;
+    formattedInternational: {
+        [key: string]: unknown;
+    } | null;
+    formattedNational: {
+        [key: string]: unknown;
+    } | null;
+};
+
+export type GenerateReportRequest = {
+    /**
+     * Phone number in E.164
+     */
+    phone: string;
+};
+
+export type GeneratedReportResponse = {
+    data: {
+        [key: string]: unknown;
+    };
+};
+
 export type AppControllerGetData = {
     body?: never;
     path?: never;
@@ -929,3 +993,29 @@ export type UserPrivateControllerSelectUserModelResponses = {
 };
 
 export type UserPrivateControllerSelectUserModelResponse = UserPrivateControllerSelectUserModelResponses[keyof UserPrivateControllerSelectUserModelResponses];
+
+export type PlatformPublicControllerLookupPhoneData = {
+    body: PhoneLookupRequest;
+    path?: never;
+    query?: never;
+    url: '/public-platform/lookup-phone';
+};
+
+export type PlatformPublicControllerLookupPhoneResponses = {
+    200: PhoneLookupResponse;
+};
+
+export type PlatformPublicControllerLookupPhoneResponse = PlatformPublicControllerLookupPhoneResponses[keyof PlatformPublicControllerLookupPhoneResponses];
+
+export type PlatformPublicControllerGenerateReportData = {
+    body: GenerateReportRequest;
+    path?: never;
+    query?: never;
+    url: '/public-platform/generate-report';
+};
+
+export type PlatformPublicControllerGenerateReportResponses = {
+    200: GeneratedReportResponse;
+};
+
+export type PlatformPublicControllerGenerateReportResponse = PlatformPublicControllerGenerateReportResponses[keyof PlatformPublicControllerGenerateReportResponses];
