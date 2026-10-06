@@ -637,6 +637,27 @@ export type GeneratedReportResponse = {
     };
 };
 
+export type ListReportItem = {
+    phone: string;
+    /**
+     * ISO 3166-1 alpha-2 country code.
+     */
+    country: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * 0 - 100
+     */
+    riskScore: number;
+    ownerIdentified: boolean;
+    createdAt: string;
+};
+
+export type ListReportsResponse = {
+    recentLookups: Array<ListReportItem>;
+    nextCursor: string | null;
+};
+
 export type AppControllerGetData = {
     body?: never;
     path?: never;
@@ -1007,15 +1028,31 @@ export type PlatformPublicControllerLookupPhoneResponses = {
 
 export type PlatformPublicControllerLookupPhoneResponse = PlatformPublicControllerLookupPhoneResponses[keyof PlatformPublicControllerLookupPhoneResponses];
 
-export type PlatformPublicControllerGenerateReportData = {
+export type PlatformPrivateControllerGenerateReportData = {
     body: GenerateReportRequest;
     path?: never;
     query?: never;
-    url: '/public-platform/generate-report';
+    url: '/private-platform/generate-report';
 };
 
-export type PlatformPublicControllerGenerateReportResponses = {
+export type PlatformPrivateControllerGenerateReportResponses = {
     200: GeneratedReportResponse;
 };
 
-export type PlatformPublicControllerGenerateReportResponse = PlatformPublicControllerGenerateReportResponses[keyof PlatformPublicControllerGenerateReportResponses];
+export type PlatformPrivateControllerGenerateReportResponse = PlatformPrivateControllerGenerateReportResponses[keyof PlatformPrivateControllerGenerateReportResponses];
+
+export type PlatformPrivateControllerListReportsData = {
+    body?: never;
+    path?: never;
+    query: {
+        cursor: string;
+        limit: number;
+    };
+    url: '/private-platform/reports';
+};
+
+export type PlatformPrivateControllerListReportsResponses = {
+    200: ListReportsResponse;
+};
+
+export type PlatformPrivateControllerListReportsResponse = PlatformPrivateControllerListReportsResponses[keyof PlatformPrivateControllerListReportsResponses];
