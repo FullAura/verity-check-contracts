@@ -666,6 +666,79 @@ export type ListReportsResponse = {
     nextCursor: string | null;
 };
 
+export type ReverseReportLatLong = {
+    latitude: number;
+    longitude: number;
+    accuracy: string;
+};
+
+export type ReverseReportAddress = {
+    id: string;
+    location_type: string;
+    street_line_1: string;
+    street_line_2: string | null;
+    city: string;
+    postal_code: string;
+    zip4: string | null;
+    state_code: string | null;
+    /**
+     * ISO 3166-1 alpha-2 country code.
+     */
+    country_code: string;
+    lat_long: ReverseReportLatLong | null;
+    delivery_point: string | null;
+    /**
+     * YYYY-MM-DD
+     */
+    link_to_person_start_date: string | null;
+};
+
+export type ReverseReportOwner = {
+    id: string;
+    name: string;
+    firstname: string | null;
+    middlename: string | null;
+    lastname: string | null;
+    alternate_names: Array<string>;
+    age_range: string | null;
+    gender: string | null;
+    /**
+     * Person or Business.
+     */
+    type: string;
+    industry: string | null;
+    /**
+     * YYYY-MM-DD
+     */
+    link_to_phone_start_date: string | null;
+    current_addresses: Array<ReverseReportAddress>;
+};
+
+export type ReverseReportError = {
+    name: string;
+    message: string;
+};
+
+export type ReverseReport = {
+    id: string;
+    /**
+     * E.164
+     */
+    phone_number: string;
+    is_valid: boolean;
+    country_calling_code: string;
+    /**
+     * Landline, Mobile, FixedVOIP, NonFixedVOIP, Premium, TollFree, Voicemail, Other.
+     */
+    line_type: string | null;
+    carrier: string | null;
+    is_prepaid: boolean | null;
+    is_commercial: boolean | null;
+    owners: Array<ReverseReportOwner>;
+    error: ReverseReportError | null;
+    warnings: Array<string>;
+};
+
 export type GetReportResponse = {
     reportId: string;
     phone: string;
@@ -681,6 +754,7 @@ export type GetReportResponse = {
     riskScore: number;
     ownerIdentified: boolean;
     createdAt: string;
+    reverseReport: ReverseReport | null;
 };
 
 export type AppControllerGetData = {
