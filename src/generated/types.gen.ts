@@ -666,6 +666,23 @@ export type ListReportsResponse = {
     nextCursor: string | null;
 };
 
+export type GetReportResponse = {
+    reportId: string;
+    phone: string;
+    /**
+     * ISO 3166-1 alpha-2 country code.
+     */
+    country: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * 0 - 100
+     */
+    riskScore: number;
+    ownerIdentified: boolean;
+    createdAt: string;
+};
+
 export type AppControllerGetData = {
     body?: never;
     path?: never;
@@ -1067,3 +1084,18 @@ export type PlatformPrivateControllerListReportsResponses = {
 };
 
 export type PlatformPrivateControllerListReportsResponse = PlatformPrivateControllerListReportsResponses[keyof PlatformPrivateControllerListReportsResponses];
+
+export type PlatformPrivateControllerGetReportData = {
+    body?: never;
+    path: {
+        reportId: string;
+    };
+    query?: never;
+    url: '/private-platform/reports/{reportId}';
+};
+
+export type PlatformPrivateControllerGetReportResponses = {
+    200: GetReportResponse;
+};
+
+export type PlatformPrivateControllerGetReportResponse = PlatformPrivateControllerGetReportResponses[keyof PlatformPrivateControllerGetReportResponses];
