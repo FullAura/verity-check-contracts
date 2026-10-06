@@ -653,8 +653,15 @@ export type ListReportItem = {
     createdAt: string;
 };
 
+export type ListReportStatistics = {
+    total: number;
+    totalThisWeek: number;
+    totalHighRisk: number;
+};
+
 export type ListReportsResponse = {
     recentLookups: Array<ListReportItem>;
+    stats: ListReportStatistics;
     nextCursor: string | null;
 };
 
