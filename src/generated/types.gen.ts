@@ -638,6 +638,7 @@ export type GeneratedReportResponse = {
 };
 
 export type ListReportItem = {
+    reportId: string;
     phone: string;
     /**
      * ISO 3166-1 alpha-2 country code.
@@ -1052,7 +1053,10 @@ export type PlatformPrivateControllerListReportsData = {
     body?: never;
     path?: never;
     query: {
-        cursor: string;
+        /**
+         * nextCursor from the previous page; omit for the first page.
+         */
+        cursor?: string;
         limit: number;
     };
     url: '/private-platform/reports';
