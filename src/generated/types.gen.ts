@@ -6,14 +6,14 @@ export type ClientOptions = {
 
 export type LoginRequest = {
     email: string;
-    redirectTo?: string;
+    password: string;
 };
 
 export type LoginResponse = {
     success: boolean;
-    accessToken?: string;
-    refreshToken?: string;
-    expiresAt?: number;
+    accessToken: string;
+    refreshToken: string;
+    expiresAt: number;
 };
 
 export type RefreshTokenRequest = {
@@ -26,26 +26,30 @@ export type RefreshTokenResponse = {
     expiresAt: number;
 };
 
-export type VerifyOtpRequest = {
+export type ForgotPasswordRequest = {
+    email: string;
     /**
-     * Token hash from the magic link
+     * Frontend reset page the email links to (with ?token_hash=…&type=recovery). Must be in Supabase Auth → Redirect URLs.
      */
-    tokenHash: string;
-};
-
-export type VerifyOtpResponse = {
-    accessToken: string;
-    refreshToken: string;
-    expiresAt: number;
-};
-
-export type SocialLoginRequest = {
-    provider: 'google' | 'facebook' | 'apple' | 'microsoft';
     redirectTo: string;
 };
 
-export type SocialLoginResponse = {
-    url: string;
+export type ForgotPasswordResponse = {
+    success: boolean;
+};
+
+export type ResetPasswordRequest = {
+    /**
+     * token_hash from the password reset email link
+     */
+    tokenHash: string;
+    password: string;
+};
+
+export type ResetPasswordResponse = {
+    accessToken: string;
+    refreshToken: string;
+    expiresAt: number;
 };
 
 export type UserProfile = {
@@ -56,6 +60,14 @@ export type UserProfile = {
 
 export type UpdateProfileRequest = {
     displayName: string;
+};
+
+export type CreatePasswordRequest = {
+    password: string;
+};
+
+export type CreatePasswordResponse = {
+    success: boolean;
 };
 
 export type KonnektiveCampaignProduct = {
@@ -753,6 +765,9 @@ export type GetReportResponse = {
      */
     riskScore: number;
     ownerIdentified: boolean;
+    callerType: {
+        [key: string]: unknown;
+    } | null;
     createdAt: string;
     reverseReport: ReverseReport | null;
 };
@@ -809,31 +824,31 @@ export type AuthPublicControllerRefreshResponses = {
 
 export type AuthPublicControllerRefreshResponse = AuthPublicControllerRefreshResponses[keyof AuthPublicControllerRefreshResponses];
 
-export type AuthPublicControllerVerifyOtpData = {
-    body: VerifyOtpRequest;
+export type AuthPublicControllerForgotPasswordData = {
+    body: ForgotPasswordRequest;
     path?: never;
     query?: never;
-    url: '/public-auth/verify-otp';
+    url: '/public-auth/forgot-password';
 };
 
-export type AuthPublicControllerVerifyOtpResponses = {
-    200: VerifyOtpResponse;
+export type AuthPublicControllerForgotPasswordResponses = {
+    200: ForgotPasswordResponse;
 };
 
-export type AuthPublicControllerVerifyOtpResponse = AuthPublicControllerVerifyOtpResponses[keyof AuthPublicControllerVerifyOtpResponses];
+export type AuthPublicControllerForgotPasswordResponse = AuthPublicControllerForgotPasswordResponses[keyof AuthPublicControllerForgotPasswordResponses];
 
-export type AuthPublicControllerSocialLoginData = {
-    body: SocialLoginRequest;
+export type AuthPublicControllerResetPasswordData = {
+    body: ResetPasswordRequest;
     path?: never;
     query?: never;
-    url: '/public-auth/social-login';
+    url: '/public-auth/reset-password';
 };
 
-export type AuthPublicControllerSocialLoginResponses = {
-    200: SocialLoginResponse;
+export type AuthPublicControllerResetPasswordResponses = {
+    200: ResetPasswordResponse;
 };
 
-export type AuthPublicControllerSocialLoginResponse = AuthPublicControllerSocialLoginResponses[keyof AuthPublicControllerSocialLoginResponses];
+export type AuthPublicControllerResetPasswordResponse = AuthPublicControllerResetPasswordResponses[keyof AuthPublicControllerResetPasswordResponses];
 
 export type AuthPrivateControllerGetProfileData = {
     body?: never;
@@ -860,6 +875,19 @@ export type AuthPrivateControllerUpdateProfileResponses = {
 };
 
 export type AuthPrivateControllerUpdateProfileResponse = AuthPrivateControllerUpdateProfileResponses[keyof AuthPrivateControllerUpdateProfileResponses];
+
+export type AuthPrivateControllerCreatePasswordData = {
+    body: CreatePasswordRequest;
+    path?: never;
+    query?: never;
+    url: '/private-auth/create-password';
+};
+
+export type AuthPrivateControllerCreatePasswordResponses = {
+    200: CreatePasswordResponse;
+};
+
+export type AuthPrivateControllerCreatePasswordResponse = AuthPrivateControllerCreatePasswordResponses[keyof AuthPrivateControllerCreatePasswordResponses];
 
 export type PaymentsPrivateControllerGetSubscriptionData = {
     body?: never;
