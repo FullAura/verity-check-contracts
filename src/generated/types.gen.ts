@@ -263,7 +263,7 @@ export type CreateOrderRequest = {
     /**
      * Campaign product id (plan). Resolved server-side to the real Konnektive product.
      */
-    productId: '48' | '45' | '46' | '49';
+    productId: '82' | '83' | '85' | '86';
     sessionId?: string;
     cardNumber?: string;
     creditCard?: string;
@@ -370,7 +370,7 @@ export type ApplePayCreateOrderRequest = {
     /**
      * Campaign product id (plan). Resolved server-side to the real Konnektive product.
      */
-    productId: '48' | '45' | '46' | '49';
+    productId: '82' | '83' | '85' | '86';
     sessionId?: string;
     /**
      * Whether the buyer chose the split-payment plan, funnel -> true, public pages -> false
@@ -428,7 +428,7 @@ export type GooglePayCreateOrderRequest = {
     /**
      * Campaign product id (plan). Resolved server-side to the real Konnektive product.
      */
-    productId: '48' | '45' | '46' | '49';
+    productId: '82' | '83' | '85' | '86';
     sessionId?: string;
     /**
      * Whether the buyer chose the split-payment plan, funnel -> true, public pages -> false
@@ -484,7 +484,7 @@ export type PaypalCreateOrderRequest = {
     /**
      * Campaign product id (plan). Resolved server-side to the real Konnektive product.
      */
-    productId: '48' | '45' | '46' | '49';
+    productId: '82' | '83' | '85' | '86';
     sessionId: string;
     fingerprintId?: string;
     utmSource?: string;
@@ -532,7 +532,7 @@ export type PaypalConfirmOrderRequest = {
     /**
      * Campaign product id (plan). PayPal always charges the non-split (full) offer.
      */
-    productId: '48' | '45' | '46' | '49';
+    productId: '82' | '83' | '85' | '86';
     sessionId?: string;
     couponCode?: string;
     affId?: string;
@@ -575,6 +575,35 @@ export type ThreedsCallbackRequest = {
     };
     orderId?: string;
     errorMsg?: string;
+};
+
+export type KonnektiveWebhookRequest = {
+    /**
+     * Shared secret validating the postback (legacy; prefer the path key)
+     */
+    secret?: string;
+    email?: string;
+    purchaseId?: string;
+};
+
+export type BackfillRequest = {
+    /**
+     * Shared admin password — must match the BACKFILL_PASSWORD env var.
+     */
+    password: string;
+};
+
+export type BackfillResponse = {
+    success: boolean;
+    email: string;
+    /**
+     * Number of Klaviyo events fired.
+     */
+    fired: number;
+    /**
+     * Human-readable list of the events fired.
+     */
+    events: Array<string>;
 };
 
 export type UserSettingsResponse = {
@@ -1231,6 +1260,10 @@ export type PaymentsPublicControllerThreedsCallbackData = {
         slug?: string;
         country?: string;
         productId?: string;
+        /**
+         * '1' split order, '0' not — added by create-order to the return URL
+         */
+        splitPayment?: string;
         firstName?: string;
         lastName?: string;
         sid?: string;
@@ -1244,12 +1277,52 @@ export type PaymentsPublicControllerThreedsCallbackResponses = {
     201: unknown;
 };
 
-export type PaymentsWebhooksControllerHandleKonnektiveWebhookData = {
+export type PaymentsWebhooksControllerKonnektiveGetData = {
     body?: never;
+    path: {
+        key: string;
+    };
+    query?: {
+        /**
+         * Shared secret validating the postback (legacy; prefer the path key)
+         */
+        secret?: string;
+        email?: string;
+        purchaseId?: string;
+    };
+    url: '/webhooks-payments/konnektive/{key}';
+};
+
+export type PaymentsWebhooksControllerKonnektiveGetResponses = {
+    200: unknown;
+};
+
+export type PaymentsWebhooksControllerKonnektivePostData = {
+    body: KonnektiveWebhookRequest;
+    path: {
+        key: string;
+    };
+    query?: {
+        /**
+         * Shared secret validating the postback (legacy; prefer the path key)
+         */
+        secret?: string;
+        email?: string;
+        purchaseId?: string;
+    };
+    url: '/webhooks-payments/konnektive/{key}';
+};
+
+export type PaymentsWebhooksControllerKonnektivePostResponses = {
+    200: unknown;
+};
+
+export type PaymentsWebhooksControllerKonnektiveLegacyPostData = {
+    body: KonnektiveWebhookRequest;
     path?: never;
     query?: {
         /**
-         * Shared secret validating the postback
+         * Shared secret validating the postback (legacy; prefer the path key)
          */
         secret?: string;
         email?: string;
@@ -1258,9 +1331,22 @@ export type PaymentsWebhooksControllerHandleKonnektiveWebhookData = {
     url: '/webhooks-payments/konnektive';
 };
 
-export type PaymentsWebhooksControllerHandleKonnektiveWebhookResponses = {
+export type PaymentsWebhooksControllerKonnektiveLegacyPostResponses = {
     200: unknown;
 };
+
+export type AnalyticsPublicControllerBackfillData = {
+    body: BackfillRequest;
+    path?: never;
+    query?: never;
+    url: '/public-analytics/backfill';
+};
+
+export type AnalyticsPublicControllerBackfillResponses = {
+    200: BackfillResponse;
+};
+
+export type AnalyticsPublicControllerBackfillResponse = AnalyticsPublicControllerBackfillResponses[keyof AnalyticsPublicControllerBackfillResponses];
 
 export type UserPrivateControllerGetUserModelData = {
     body?: never;
